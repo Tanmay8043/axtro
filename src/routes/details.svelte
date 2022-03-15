@@ -3,194 +3,105 @@
     import { goto } from '$app/navigation';
     import axios from "axios";
     import { onMount } from 'svelte';
+    import { MhahPanchang } from '../../node_modules/mhah-panchang/src';
+    import {returnAllPlanets} from "../blastro"
     
+    var obj = new MhahPanchang();
+    var obs = {
+    day: 14,                //integer
+    dst: false,             //daylight savings time, boolean
+    hours: 6,               //integer
+    latitude: "42:43:38",   //string in this format
+    longitude: "82:43:00",  //string in this format
+    minutes: 50,            //integer
+    month: 11,              //integer
+    name: "Location",       //string
+    seconds: 0,             //integer
+    tz: 0,                  //timezone correction from GMT
+    year: 2014              //integer
+  };
+
+  console.log(returnAllPlanets(obs));
+
+// Based current date and time : calculate(date)
+
+// let mhahCal = obj.calendar(
+//   new Date('2022-03-15T10:30:28.229Z'),
+//   12.972,
+//   77.594
+// );
+// console.log(mhahCal);
+
     let user;
     onMount(async () => {
         user =$dataValue;
-        getDetails1(); 
-        getDetails2();
-        getDetails3(); 
-        getDetails4();     
+        getDetails();     
 	});
-    const b=[], d=[], f=[], h=[];
-    const getDetails1=()=>{
-        let nbDetails;
-        var result=[];
-        const options = {
-            method: 'POST',
-            url: 'https://vedicrishi-horoscope-matching-v1.p.rapidapi.com/numero_table/',
-            headers: {
-                'content-type': 'application/json',
-                'x-rapidapi-host': 'vedicrishi-horoscope-matching-v1.p.rapidapi.com',
-                'x-rapidapi-key': 'a6bbe4a908mshd9e35dd6348adcfp1f289ajsn1e08492bea1d'
-            },
-            data: {
-                day: user.day.toString(),
-                month: user.month.toString(),
-                year: user.year.toString(),
-                hour: user.hours.toString(),
-                min: user.minutes.toString(),
-                name: user.name.toString(),
-                lat: user.place.latitude.toString(),
-                lon: user.place.longitude.toString(),
-                tzone: user.zone.toString()
-        }
-        };
 
-        axios.request(options).then(function (response) {
-            nbDetails=response.data;
-            result = Object.entries(nbDetails);  
-            for (let i = 0; i < result.length; i++) {
-                b[i]=result[i][1];
-            }
-        }).catch(function (error) {
-            console.error(error);
-        });
-    };
+    const changeDate=(dt)=>{
+        var dd = String(dt.getDate()).padStart(2, '0');
+        var mm = String(dt.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = dt.getFullYear();
+        return dd+'/'+mm+'/'+yyyy;
+    }
 
-    const getDetails2=()=>{
-        let details;
-        var result=[];
-        const options = {
-            method: 'POST',
-            url: 'https://vedicrishi-horoscope-matching-v1.p.rapidapi.com/birth_details/',
-            headers: {
-                'content-type': 'application/json',
-                'x-rapidapi-host': 'vedicrishi-horoscope-matching-v1.p.rapidapi.com',
-                'x-rapidapi-key': 'a6bbe4a908mshd9e35dd6348adcfp1f289ajsn1e08492bea1d'
-            },
-            data: {
-                day: user.day.toString(),
-                month: user.month.toString(),
-                year: user.year.toString(),
-                hour: user.hours.toString(),
-                min: user.minutes.toString(),
-                lat: user.place.latitude.toString(),
-                lon: user.place.longitude.toString(),
-                tzone: user.zone.toString(),
-                gender: user.gender.toString()
-            }
-        };
-
-        axios.request(options).then(function (response) {
-            details=response.data;
-            result = Object.entries(details);
-            for (let i = 0; i < result.length; i++) {
-                d[i]=result[i][1];
-            }
-        }).catch(function (error) {
-            console.error(error);
-        });
-    };
-
-    const getDetails3=()=>{
-        let details;
-        var result=[];
-        const options = {
-            method: 'POST',
-            url: 'https://vedicrishi-horoscope-matching-v1.p.rapidapi.com/astro_details/',
-            headers: {
-                'content-type': 'application/json',
-                'x-rapidapi-host': 'vedicrishi-horoscope-matching-v1.p.rapidapi.com',
-                'x-rapidapi-key': 'a6bbe4a908mshd9e35dd6348adcfp1f289ajsn1e08492bea1d'
-            },
-            data: {
-                day: user.day.toString(),
-                month: user.month.toString(),
-                year: user.year.toString(),
-                hour: user.hours.toString(),
-                min: user.minutes.toString(),
-                lat: user.place.latitude.toString(),
-                lon: user.place.longitude.toString(),
-                tzone: user.zone.toString(),
-                gender: user.gender.toString()
-            }
-        };
-
-        axios.request(options).then(function (response) {
-            details=response.data;
-            result = Object.entries(details);
-            for (let i = 0; i < result.length; i++) {
-                f[i]=result[i][1];
-            }
-        }).catch(function (error) {
-            console.error(error);
-        });
-    };
-
-    const getDetails4=()=>{
-        let details;
-        var result=[];
-        const options = {
-            method: 'POST',
-            url: 'https://vedicrishi-horoscope-matching-v1.p.rapidapi.com/basic_panchang/',
-            headers: {
-                'content-type': 'application/json',
-                'x-rapidapi-host': 'vedicrishi-horoscope-matching-v1.p.rapidapi.com',
-                'x-rapidapi-key': 'a6bbe4a908mshd9e35dd6348adcfp1f289ajsn1e08492bea1d'
-            },
-            data: {
-                day: user.day.toString(),
-                month: user.month.toString(),
-                year: user.year.toString(),
-                hour: user.hours.toString(),
-                min: user.minutes.toString(),
-                lat: user.place.latitude.toString(),
-                lon: user.place.longitude.toString(),
-                tzone: user.zone.toString(),
-                gender: user.gender.toString()
-            }
-        };
-
-        axios.request(options).then(function (response) {
-            details=response.data;
-            result = Object.entries(details);
-            for (let i = 0; i < result.length; i++) {
-                h[i]=result[i][1];
-            }
-        }).catch(function (error) {
-            console.error(error);
-        });
-    };
-
-    const viewDetails1=()=>{        
-        var el = document.getElementById("demo");
-        el.classList.toggle("hidden");
+    var result=[];
+    const getDetails=()=>{
+        var details={};
         
-        let x= document.getElementById("btn1").innerText;
-        btn1.innerText= (x=="View") ? "Close" :"View";
+        var days =15;
+        var start= new Date();
+        var end = new Date(start.getTime() + (days * 24 * 60 * 60 * 1000));
+        var loop = new Date(start);
+        
+            
+        while(loop <= end){
+           var d= loop
+          //  console.log(d);
+           var mhahObj = obj.calculate(new Date(d));
+          //  console.log(mhahObj);
+           var r={Date: d.toLocaleDateString("hi-IN"), mhahObj }
+          //  console.log(r);
+           result=[...result, r];
+           console.log(result);
+          //  details={d, mhahObj };
+          //  console.log(details)
+          //  details={date: d}
+          //   axios.request({
+          //       method: 'POST',
+          //       url: 'https://vedicrishi-horoscope-matching-v1.p.rapidapi.com/basic_panchang/',
+          //       headers: {
+          //           'content-type': 'application/json',
+          //           'x-rapidapi-host': 'vedicrishi-horoscope-matching-v1.p.rapidapi.com',
+          //           'x-rapidapi-key': 'a6bbe4a908mshd9e35dd6348adcfp1f289ajsn1e08492bea1d'
+          //       },
+          //       data: {
+          //           day: loop.getDate().toString(),
+          //           month: loop.getMonth().toString(),
+          //           year: loop.getFullYear().toString(),
+          //           hour: user.hours.toString(),
+          //           min: user.minutes.toString(),
+          //           lat: user.place.latitude.toString(),
+          //           lon: user.place.longitude.toString(),
+          //           tzone: user.zone.toString(),
+          //           gender: user.gender.toString()
+          //       }
+          //   }).then(function (response) {
+          //       console.log(loop);
+          //       var x= response.data
+          //       details={...details, x}
+                
+          //       result=[...result, details];
+          //       console.log(result);
+                
+          //   }).catch(function (error) {
+          //       console.error(error);
+          //   });
+            
+            loop.setDate(loop.getDate() + 1);
+        }
+        
     };
-
-    const viewDetails2=()=>{        
-        var el = document.getElementById("demo2");
-        el.classList.toggle("hidden");
-
-        let x= document.getElementById("btn2").innerText;
-        btn2.innerText= (x=="View") ? "Close" :"View";
-    };
-
-    const viewDetails3=()=>{        
-        var el = document.getElementById("demo3");
-        el.classList.toggle("hidden");
-
-        let x= document.getElementById("btn3").innerText;
-        btn3.innerText= (x=="View") ? "Close" :"View";
-    };
-
-    const viewDetails4=()=>{        
-        var el = document.getElementById("demo4");
-        el.classList.toggle("hidden");
-
-        let x= document.getElementById("btn4").innerText;
-        btn4.innerText= (x=="View") ? "Close" :"View";
-    };
-
-    const a=["Name", "Date","Destiny Number","Radical Number","Name number","Evil Number","Favourite Color","Favourite Day","Favourite God","Favourite Mantra","Favourite Metal","Favourite Stone","Favourite Substone","Friendly Number","Neutral Number","Radical Number","Radical Ruler"];
-    const c=["Year", "Month", "Day","Hour", "Minute","Latitude","Longitude","TimeZone","Gender","Seconds","Ayanamsha","Sunrise", "Sunset"];
-    const e =["Ascendant","Ascendant-Lord", "Varna","Vashya","Yoni","Gan","Nadi","SignLord","Sign","Nakshatra", "Nakshatra-Lord","Charan","Yog","Karan","Tithi","Yunja","Tatva","Name Alphabet","Paya"];
-    const g=["Day", "Tithi","Nakshatra","Yog","Karan","Sunrise","Sunset","Vedic-Sunrise","Vedic-Sunset"];
-
-       
 </script>
 
 <div>
@@ -201,81 +112,46 @@
             Home
         </button>
     </div>
-    <div class="grid grid-cols-1 justify-center w-2/5 mx-auto mt-20">
-        <div>
-            <div class="flex justify-between bg-gray-200">
-                <p class="pl-4 font-semibold text-lg">Numerology basic details</p>
-                <div>
-                    <button id="btn1" class="bg-gray-300 w-20 h-full" on:click={viewDetails1}>View</button>
-                </div>
+    <div class="flex flex-col">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Day</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tithi</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Karan</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nakshatra</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Yog</th>
+                    <!-- <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sunrise</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vedic Sunrise</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sunset</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vedic Sunset</th> -->
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {#each result as res, i}
+                  <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{res.Date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{res.mhahObj.Day.name_en_UK}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{res.mhahObj.Tithi.name_en_IN}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{res.mhahObj.Karna.name_en_IN}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{res.mhahObj.Nakshatra.name_en_IN}r</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{res.mhahObj.Yoga.name_en_IN}</td>
+                    <!-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{res.x.sunrise}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{res.x.vedic_sunrise}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{res.x.sunset}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{res.x.vedic_sunset}</td> -->
+                  </tr>
+                  {/each}
+                  <!-- More people... -->
+                </tbody>
+              </table>
             </div>
-            <div id="demo" class="bg-orange-100 hidden p-2 text-clip overflow-hidden">
-                <table class="border-4 border-red-300 w-full">
-                    {#each a as item, i}
-                    <tr class="border border-red-300">
-                        <td class="pl-4 border border-red-300">{item}</td>
-                        <td class="pl-4">{b[i]}</td> 
-                    </tr>
-                    {/each}
-                </table>
-            </div>
+          </div>
         </div>
-        
-        <div class="mt-2">
-            <div class="flex justify-between bg-gray-200">
-                <p class="pl-4 font-semibold text-lg">Birth details</p>
-                <div>
-                    <button id="btn2" class="bg-gray-300 w-20 h-full" on:click={viewDetails2}>View</button>
-                </div>
-            </div>
-            <div id="demo2" class="bg-orange-100 hidden p-2 text-clip overflow-hidden">
-                <table class="border-4 border-red-300 w-full">
-                    {#each c as item, i}
-                    <tr class="border border-red-300">
-                        <td class="pl-4 border border-red-300">{item}</td>
-                        <td class="pl-4">{d[i]}</td> 
-                    </tr>
-                    {/each}
-                </table>
-            </div>
-        </div>
-
-        <div class="mt-2">
-            <div class="flex justify-between bg-gray-200">
-                <p class="pl-4 font-semibold text-lg">Basic Astrologic details</p>
-                <div>
-                    <button id="btn3" class="bg-gray-300 w-20 h-full" on:click={viewDetails3}>View</button>
-                </div>
-            </div>
-            <div id="demo3" class="bg-orange-100 hidden p-2 text-clip overflow-hidden">
-                <table class="border-4 border-red-300 w-full">
-                    {#each e as item, i}
-                    <tr class="border border-red-300">
-                        <td class="pl-4 border border-red-300">{item}</td>
-                        <td class="pl-4">{f[i]}</td> 
-                    </tr>
-                    {/each}
-                </table>
-            </div>
-        </div>
-
-        <div class="my-2">
-            <div class="flex justify-between bg-gray-200">
-                <p class="pl-4 font-semibold text-lg">Basic Panchang details</p>
-                <div>
-                    <button id="btn4" class="bg-gray-300 w-20 h-full" on:click={viewDetails4}>View</button>
-                </div>
-            </div>
-            <div id="demo4" class="bg-orange-100 hidden p-2 text-clip overflow-hidden">
-                <table class="border-4 border-red-300 w-full">
-                    {#each g as item, i}
-                    <tr class="border border-red-300">
-                        <td class="pl-4 border border-red-300">{item}</td>
-                        <td class="pl-4">{h[i]}</td> 
-                    </tr>
-                    {/each}
-                </table>
-            </div>
-        </div>
-    </div>
+      </div>
+      
 </div>
