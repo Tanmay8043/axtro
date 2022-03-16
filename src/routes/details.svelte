@@ -7,21 +7,45 @@
     import {returnAllPlanets} from "../blastro"
     
     var obj = new MhahPanchang();
-    var obs = {
-    day: 14,                //integer
-    dst: false,             //daylight savings time, boolean
-    hours: 6,               //integer
-    latitude: "42:43:38",   //string in this format
-    longitude: "82:43:00",  //string in this format
-    minutes: 50,            //integer
-    month: 11,              //integer
-    name: "Location",       //string
-    seconds: 0,             //integer
-    tz: 0,                  //timezone correction from GMT
-    year: 2014              //integer
-  };
+    
+  // function convertDMS( lat, lng ) {
+ 
+  // var convertLat = Math.abs(lat);
+  // var LatDeg = Math.floor(convertLat);
+  // var LatMin = (Math.floor((convertLat - LatDeg) * 60));
+  // var LatCardinal = ((lat > 0) ? "n" : "s");
+    
+  // var convertLng = Math.abs(lng);
+  // var LngDeg = Math.floor(convertLng);
+  // var LngMin = (Math.floor((convertLng - LngDeg) * 60));
+  // var LngCardinal = ((lng > 0) ? "e" : "w");
+    
+  // return LatDeg + LatCardinal + LatMin  + "<br />" + LngDeg + LngCardinal + LngMin;
+  // }
+  function toDegreesMinutesAndSeconds(coordinate) {
+    var absolute = Math.abs(coordinate);
+    var degrees = Math.floor(absolute);
+    var minutesNotTruncated = (absolute - degrees) * 60;
+    var minutes = Math.floor(minutesNotTruncated);
+    var seconds = Math.floor((minutesNotTruncated - minutes) * 60);
 
-  console.log(returnAllPlanets(obs));
+    return {degrees, minutes ,seconds};
+}
+
+console.log(toDegreesMinutesAndSeconds(26.894094));
+
+function convertDMS(lat, lng) {
+    var latitude = toDegreesMinutesAndSeconds(lat);
+    var latitudeCardinal = lat >= 0 ? "N" : "S";
+
+    var longitude = toDegreesMinutesAndSeconds(lng);
+    var longitudeCardinal = lng >= 0 ? "E" : "W";
+
+    return {latitude, latitudeCardinal, longitude, longitudeCardinal};
+}
+
+
+  // 
 
 // Based current date and time : calculate(date)
 
@@ -35,16 +59,30 @@
     let user;
     onMount(async () => {
         user =$dataValue;
+        console.log(user);
         getDetails();     
 	});
-
-    const changeDate=(dt)=>{
-        var dd = String(dt.getDate()).padStart(2, '0');
-        var mm = String(dt.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = dt.getFullYear();
-        return dd+'/'+mm+'/'+yyyy;
-    }
-
+  console.log(convertDMS($dataValue.place.latitude, $dataValue.place.longitude));
+  var lat= toDegreesMinutesAndSeconds($dataValue.place.latitude);
+  var latitude= lat.degrees+":"+lat.minutes+":"+lat.seconds;
+  console.log(latitude);
+  var long= toDegreesMinutesAndSeconds($dataValue.place.longitude);
+  var longitude= long.degrees+":"+long.minutes+":"+long.seconds;
+  console.log(longitude);
+  var obs = {
+    day: parseInt($dataValue.day),                //integer
+    dst: false,             //daylight savings time, boolean
+    hours: parseInt($dataValue.hours),               //integer
+    latitude: latitude.toString(),   //string in this format
+    longitude: longitude.toString(),  //string in this format
+    minutes: parseInt($dataValue.minutes),            //integer
+    month: parseInt($dataValue.month),              //integer
+    name: "Location",       //string
+    seconds: 0,             //integer
+    tz: 5.5,                  //timezone correction from GMT
+    year: parseInt($dataValue.year)              //integer
+  };
+  console.log(returnAllPlanets(obs));
     var result=[];
     const getDetails=()=>{
         var details={};
