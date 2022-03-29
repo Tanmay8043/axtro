@@ -17,10 +17,10 @@
 
     var lat = toDegreesMinutesAndSeconds($dataValue.place.latitude);
     var latitude = lat.degrees + ":" + lat.minutes + ":" + lat.seconds;
-    console.log(latitude);
+    
     var long = toDegreesMinutesAndSeconds($dataValue.place.longitude);
     var longitude = long.degrees + ":" + long.minutes + ":" + long.seconds;
-    console.log(longitude);
+    
 
     var date= new Date($dataValue.date)
     var days = 15;
@@ -44,10 +44,8 @@
             tz: 5.5, //timezone correction from GMT
             year: parseInt(loop.getFullYear()), //integer
         };
-      console.log(returnAllPlanets(obs));
       let res= {Date: d.toLocaleDateString("hi-IN"), data: returnAllPlanets(obs).coords}
       result=[...result, res];
-      console.log(result);
       loop.setDate(loop.getDate() + 1);
     }
       }

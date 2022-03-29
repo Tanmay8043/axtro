@@ -1,5 +1,4 @@
 <script>
-    import axios from "axios";
     import { placeValue } from './database.js';
     import { onMount } from 'svelte';
     
@@ -10,33 +9,29 @@
 	});
 
  let place;
- let params = {
-        access_key: '097d0b0b7ad2ebd8d53e0a10bbed1902',
-        query: place
-    }
     let places = [];
     let latitude=[];
     let longitude=[];
-    const getCoords=()=>{
-        params = {
-        access_key: '097d0b0b7ad2ebd8d53e0a10bbed1902',
-        query: place
+    const getCoords=async()=>{
+        const options = {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({place})
         };
-        axios.get('http://api.positionstack.com/v1/forward', {params})
-        .then(response => {
-            console.log(response.data);
-            for (let index = 0; index < response.data.data.length; index++) {
-                let city=response.data.data[index].locality;
-                let state=response.data.data[index].region;
-                let country=response.data.data[index].country;
-                let county=response.data.data[index].county;
-                latitude[index] = response.data.data[index].latitude;
-                longitude[index] = response.data.data[index].longitude;
+        fetch('/places/places', options)
+        .then(res => res.json())
+        .then(data=>{
+            for (let index = 0; index < data.data.length; index++) {
+                let city=data.data[index].locality;
+                let state=data.data[index].region;
+                let country=data.data[index].country;
+                let county=data.data[index].county;
+                latitude[index] = data.data[index].latitude;
+                longitude[index] = data.data[index].longitude;
                 places[index] = city+", "+state+", "+country+" ("+county+")";
             }
-        }).catch(error => {
-            console.log(error);
-        });
+        })
+        .catch(error => console.error(error))
     }
     
     const setPlace=(place)=>{

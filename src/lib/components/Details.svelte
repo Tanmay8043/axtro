@@ -2,7 +2,6 @@
   import Places from "./Places.svelte";
   import { placeValue } from "./database.js";
   import { dataValue } from "./database";
-console.log($placeValue);
     let date, name, place=$placeValue.place, longitude= $placeValue.longitude, latitude= $placeValue.latitude;
     var a=(new Date().toISOString().substring(0,10));
     var b =(new Date().toString().substring(16, 24));
