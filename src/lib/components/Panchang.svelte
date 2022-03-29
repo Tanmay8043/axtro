@@ -172,7 +172,7 @@
                             <span class="ml-2 flex-1 w-0 truncate"> {dateDet.Nakshatra.name_en_IN} </span>
                           </div>
                         </li>
-                        <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
+                        <li class="pl-3 py-3 flex items-center justify-between text-sm">
                           <div class="w-0 flex-1 flex items-center">
                             <dt class="text-sm font-medium text-gray-500">Nakshatra Start:</dt>
                             <span class="ml-2 flex-1 w-0 truncate"> {new Date(dateDet.Nakshatra.start).toLocaleDateString("hi-IN")}, {new Date(dateDet.Nakshatra.start).toLocaleTimeString("hi-IN")} </span>
@@ -187,7 +187,7 @@
                       </ul>
                     </dd>
                   </div>
-                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-10 sm:px-6">
                     <dt class="text-sm font-medium text-gray-500">Yoga</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       <ul class="border border-gray-200 rounded-md divide-y divide-gray-200">
